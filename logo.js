@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     posX: 100,
     posY: 100,
     angle: 90,
+    color: "blue",
   };
 
   // Diccionario de comandos
@@ -14,7 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
     drawRect: drawRect,
     clear: clearCanvas,
     drawTriangle: drawTriangle,
-    advance: advance
+    advance: advance,
+    drawLine: drawLine,
+    turtle: fturtle ,
+    turnLeft: turnLeft,
+    turnRight: turnRight,
+    changeColor: changeColor,
+
   };
 
   // Función para ejecutar comandos
@@ -22,19 +29,49 @@ document.addEventListener("DOMContentLoaded", () => {
     const args = command.split(" ");
     const cmd = args[0];
     if (commands[cmd]) {
+        console.log(`Executing : ${cmd} ${args.slice(1)}  `);  
       commands[cmd](args.slice(1));
+      drawTriangle();
     } else {
-      console.log(`Comando desconocido: ${cmd}`);
+      console.log(`Command unkown: ${cmd}`);
     }
   }
+
+  
+  function  changeColor(args)
+  {
+    const color  = args[0];
+    turtle.color = color ;
+  }
+
+  
+
+  function  turnRight(args)
+  {
+    const angle = Number(args[0]);
+    turtle.angle = turtle.angle - angle;
+  }
+
+
+  function  turnLeft(args)
+  {
+    const angle = Number(args[0]);
+    turtle.angle = turtle.angle + angle;
+  }
+
+  function fturtle (args){
+    console.log("turtle:"+JSON.stringify(turtle));
+  } 
+
+
   function toRadians(angle) {
     return angle * (Math.PI / 180);
 }
 
 
 
-  function drawTriangle(args) {
-    const [centerX, centerY, base, height, angleDegrees] = args.map(Number);
+  function drawTriangle() {
+    const [centerX, centerY, base, height, angleDegrees] = [ turtle.posX, turtle.posY, 10, 15, turtle.angle ];
 
     // Convertir el ángulo a radianes
     const angle = angleDegrees * (Math.PI / 180);
@@ -78,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.lineTo(finalRightX, finalRightY);
     ctx.closePath();
 
-    ctx.fillStyle = "blue";
+    ctx.fillStyle = "yellow";
     ctx.fill();
     ctx.strokeStyle = "black";
     ctx.stroke();
@@ -94,18 +131,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const newY = turtle.posY - length * Math.sin(angleInRadians); // Usamos "-" ya que la coordenada Y en canvas decrece hacia arriba
 
     // Dibuja una línea desde la posición actual hasta la nueva posición
-    drawLine(turtle.posX, turtle.posY, newX, newY);
+    drawLine([turtle.posX, turtle.posY, newX, newY]);
 
     // Actualizar la posición de la tortuga
     turtle.posX = newX;
     turtle.posY = newY;
   }
 
-  function drawLine(x1, y1, x2, y2) { 
+  function drawLine(args) { 
   
+    const [x1, y1, x2, y2] = args.map(Number);
+  
+
+    console.log ("x1:"+x1+" y1:"+y1+" x2:"+x2+" y2:"+y2);
+
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
+    ctx.strokeStyle = turtle.color;
+
     ctx.stroke();
 }
 

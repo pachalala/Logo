@@ -8,4 +8,4 @@
         advance
         turn (degrees)
         change color
-
+        save history (for repaiting)
