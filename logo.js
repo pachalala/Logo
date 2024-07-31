@@ -10,6 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
     color: "blue",
   };
 
+  let history = [ ];
+
   // Diccionario de comandos
   const commands = {
     drawRect: drawRect,
@@ -17,112 +19,124 @@ document.addEventListener("DOMContentLoaded", () => {
     drawTriangle: drawTriangle,
     advance: advance,
     drawLine: drawLine,
-    turtle: fturtle ,
+    turtle: fturtle,
     turnLeft: turnLeft,
     turnRight: turnRight,
     changeColor: changeColor,
-
+    triangulo: triangulo,
   };
+
+
+function drawHistory() {
+
+    turtle = {
+        posX: 100,
+        posY: 100,
+        angle: 90,
+        color: "blue",
+      };
+
+    clearCanvas();
+    history.forEach((cmd) => {
+      console.log(cmd);
+      commands[cmd.command](cmd.args); 
+    });
+    triangulo();
+
+ 
+}
 
   // Función para ejecutar comandos
   function executeCommand(command) {
     const args = command.split(" ");
     const cmd = args[0];
     if (commands[cmd]) {
-        console.log(`Executing : ${cmd} ${args.slice(1)}  `);  
+      console.log(`Executing : ${cmd} ${args.slice(1)}  `);
+
+      
+      history.push({command: cmd, args: args.slice(1)});
+
+      
+
+      drawHistory();
+      /*
+      triangulo(true);
       commands[cmd](args.slice(1));
-      drawTriangle();
+      triangulo();
+      */
     } else {
       console.log(`Command unkown: ${cmd}`);
     }
   }
 
-  
-  function  changeColor(args)
-  {
-    const color  = args[0];
-    turtle.color = color ;
+  function changeColor(args) {
+    const color = args[0];
+    turtle.color = color;
   }
 
-  
-
-  function  turnRight(args)
-  {
+  function turnRight(args) {
     const angle = Number(args[0]);
     turtle.angle = turtle.angle - angle;
   }
 
-
-  function  turnLeft(args)
-  {
+  function turnLeft(args) {
     const angle = Number(args[0]);
     turtle.angle = turtle.angle + angle;
   }
 
-  function fturtle (args){
-    console.log("turtle:"+JSON.stringify(turtle));
-  } 
-
+  function fturtle(args) {
+    console.log("turtle:" + JSON.stringify(turtle));
+  }
 
   function toRadians(angle) {
     return angle * (Math.PI / 180);
-}
+  }
 
-
-
+  // Función para rotar un punto alrededor del centro
   function drawTriangle() {
-    const [centerX, centerY, base, height, angleDegrees] = [ turtle.posX, turtle.posY, 10, 15, turtle.angle ];
+    const [x, y, base, height, angle] = [
+      turtle.posX,
+      turtle.posY,
+      10,
+      15,
+      turtle.angle,
+    ];
 
     // Convertir el ángulo a radianes
-    const angle = angleDegrees * (Math.PI / 180);
+    let radians = angle * (Math.PI / 180);
 
-    // Coordenadas del triángulo sin rotar
-    const halfBase = base / 2;
-    const topX = 0;
-    const topY = -height / 2;
-    const leftX = -halfBase;
-    const leftY = height / 2;
-    const rightX = halfBase;
-    const rightY = height / 2;
+    // Guardar el estado del contexto
+    ctx.save();
 
-    // Función para rotar un punto alrededor del centro
-    function rotatePoint(x, y, angle) {
-      const cos = Math.cos(angle);
-      const sin = Math.sin(angle);
-      return {
-        x: cos * x - sin * y,
-        y: sin * x + cos * y,
-      };
-    }
+    // Mover el contexto al punto x, y
+    ctx.translate(x, y);
 
-    // Rotar los puntos del triángulo
-    const rotatedTop = rotatePoint(topX, topY, angle);
-    const rotatedLeft = rotatePoint(leftX, leftY, angle);
-    const rotatedRight = rotatePoint(rightX, rightY, angle);
+    // Rotar el contexto por el ángulo dado
+    ctx.rotate(radians);
 
-    // Trasladar los puntos rotados al centro del triángulo
-    const finalTopX = centerX + rotatedTop.x;
-    const finalTopY = centerY + rotatedTop.y;
-    const finalLeftX = centerX + rotatedLeft.x;
-    const finalLeftY = centerY + rotatedLeft.y;
-    const finalRightX = centerX + rotatedRight.x;
-    const finalRightY = centerY + rotatedRight.y;
-
-    // Dibuja el triángulo
+    // Dibujar el triángulo
     ctx.beginPath();
-    ctx.moveTo(finalTopX, finalTopY);
-    ctx.lineTo(finalLeftX, finalLeftY);
-    ctx.lineTo(finalRightX, finalRightY);
+    ctx.moveTo(0, 0);
+    ctx.lineTo(base, 0);
+    ctx.lineTo(base / 2, -height);
     ctx.closePath();
 
-    ctx.fillStyle = "yellow";
-    ctx.fill();
-    ctx.strokeStyle = "black";
+    // Aplicar estilo al triángulo
+    ctx.strokeStyle = "black"; // Color del borde
+    ctx.fillStyle = "blue"; // Color de relleno
     ctx.stroke();
+    ctx.fill();
+
+    // Restaurar el estado del contexto
+    ctx.restore();
   }
 
   // Función para avanzar la tortuga y dibujar una línea
   function advance(args) {
+
+
+   console.log("en advance..");
+
     const length = Number(args[0]);
     const angleInRadians = toRadians(turtle.angle);
 
@@ -131,39 +145,81 @@ document.addEventListener("DOMContentLoaded", () => {
     const newY = turtle.posY - length * Math.sin(angleInRadians); // Usamos "-" ya que la coordenada Y en canvas decrece hacia arriba
 
     // Dibuja una línea desde la posición actual hasta la nueva posición
-    drawLine([turtle.posX, turtle.posY, newX, newY]);
+    drawLine([turtle.posX, turtle.posY, newX, newY, turtle.color]);
 
     // Actualizar la posición de la tortuga
     turtle.posX = newX;
     turtle.posY = newY;
   }
 
-  function drawLine(args) { 
-  
-    const [x1, y1, x2, y2] = args.map(Number);
-  
+  function triangulo(limpia = false) {
+    const length = 15; //Number(args[0]);
+    let angleInRadians = toRadians(turtle.angle);
 
-    console.log ("x1:"+x1+" y1:"+y1+" x2:"+x2+" y2:"+y2);
+    // Calcular la nueva posición
+    let topX = turtle.posX + length * Math.cos(angleInRadians);
+    let topY = turtle.posY - length * Math.sin(angleInRadians); // Usamos "-" ya que la coordenada Y en canvas decrece hacia arriba
+
+    // Dibuja una línea desde la posición actual hasta la nueva posición
+    // drawLine([turtle.posX, turtle.posY, newX, newY, "red"]);
+
+    angleInRadians = toRadians(turtle.angle - 90); // asume que queda en angulo recto
+    const leftBaseX = turtle.posX + (length / 3) * Math.cos(angleInRadians);
+    const leftBaseY = turtle.posY - (length / 3) * Math.sin(angleInRadians); // Usamos "-" ya que la coordenada Y en canvas decrece hacia arriba
+
+    //drawLine([turtle.posX, turtle.posY, newX, newY, "red"]);
+
+    angleInRadians = toRadians(turtle.angle + 90); // asume que queda en angulo recto
+    const rightBaseX = turtle.posX + (length / 3) * Math.cos(angleInRadians);
+    const rightBaseY = turtle.posY - (length / 3) * Math.sin(angleInRadians); // Usamos "-" ya que la coordenada Y en canvas decrece hacia arriba
+
+    //drawLine([turtle.posX, turtle.posY, newX, newY, "red"]);
+
+    // Dibujar el triángulo
+    ctx.beginPath();
+    ctx.moveTo(topX, topY);
+    ctx.lineTo(leftBaseX, leftBaseY);
+    ctx.lineTo(rightBaseX, rightBaseY);
+    ctx.closePath();
+
+    if (!limpia) {
+      ctx.strokeStyle = "black"; // Color del borde
+      ctx.fillStyle = "blue"; // Color de relleno
+      ctx.stroke();
+      ctx.fill();
+    } else {
+      ctx.strokeStyle = "white"; // Color del borde
+      ctx.fillStyle = "white"; // Color de relleno
+      ctx.stroke();
+      ctx.fill();
+    }
+  }
+
+  function drawLine(args) {
+    const [x1, y1, x2, y2, color] = args.map(Number);
+
+    console.log("x1:" + x1 + " y1:" + y1 + " x2:" + x2 + " y2:" + y2);
 
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
-    ctx.strokeStyle = turtle.color;
+    ctx.strokeStyle = "black";
 
     ctx.stroke();
-}
-
+  }
 
   // Comando: Dibujar un rectángulo
   function drawRect(args) {
     const [x, y, width, height] = args.map(Number);
     ctx.fillStyle = "blue";
-    console.log( "   aqui "+x+","+y+","+width+","+height);
+    console.log("   aqui " + x + "," + y + "," + width + "," + height);
     ctx.fillRect(x, y, width, height);
   }
 
   // Comando: Limpiar el canvas
   function clearCanvas() {
+    console.log("clearCanvas");
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
