@@ -10,41 +10,80 @@ document.addEventListener("DOMContentLoaded", () => {
     color: "blue",
   };
 
-  let history = [ ];
+  let history = [];
 
   // Diccionario de comandos
   const commands = {
     drawRect: drawRect,
     clear: clearCanvas,
-    drawTriangle: drawTriangle,
+    drawtriangle: drawTriangle,
     advance: advance,
-    drawLine: drawLine,
+    drawline: drawLine,
     turtle: fturtle,
-    turnLeft: turnLeft,
-    turnRight: turnRight,
-    changeColor: changeColor,
+    turnleft: turnLeft,
+    turnright: turnRight,
+    changecolor: changeColor,
     triangulo: triangulo,
+    repeat: repeat,
   };
 
+  function extractOuterBracketContent(command) {
+    const regex = /\[(.*)\]/;
+    const match = command.match(regex);
+    if (match && match[1]) {
+      return match[1];
+    }
+    return null;
+  }
 
-function drawHistory() {
+  function repeat(args) {
+    console.log("in repeat: args:" + args);
 
+    const numRepetitions = Number(args[0]);
+    const commandStr = args.slice(1).join(" ");
+
+    const match = extractOuterBracketContent(commandStr);
+
+    console.log("match" + match);
+
+    if (match) {
+      for (let i = 1; i <= numRepetitions; i++) {
+        const commandsList = match.split(";");
+
+        console.log("commandsList:" + commandsList);
+
+        commandsList.forEach((cmdStr) => {
+          const cmdArgs = cmdStr.trim().split(" ");
+          const cmd = cmdArgs[0];
+          if (commands[cmd]) {
+            console.log(`Executing Command : ${cmd}  ${cmdArgs.slice(1)}`);
+
+            commands[cmd](cmdArgs.slice(1));
+          } else {
+            console.log(`Command unknown: ${cmd}`);
+          }
+        });
+      }
+    } else {
+      console.log("No brackets found");
+    }
+  }
+
+  function drawHistory() {
     turtle = {
-        posX: 100,
-        posY: 100,
-        angle: 90,
-        color: "blue",
-      };
+      posX: 100,
+      posY: 100,
+      angle: 90,
+      color: "blue",
+    };
 
     clearCanvas();
     history.forEach((cmd) => {
-      console.log(cmd);
-      commands[cmd.command](cmd.args); 
+      console.log("in command:" + JSON.stringify(cmd));
+      commands[cmd.command](cmd.args);
     });
     triangulo();
-
- 
-}
+  }
 
   // Función para ejecutar comandos
   function executeCommand(command) {
@@ -53,10 +92,7 @@ function drawHistory() {
     if (commands[cmd]) {
       console.log(`Executing : ${cmd} ${args.slice(1)}  `);
 
-      
-      history.push({command: cmd, args: args.slice(1)});
-
-      
+      history.push({ command: cmd, args: args.slice(1) });
 
       drawHistory();
       /*
@@ -133,9 +169,7 @@ function drawHistory() {
 
   // Función para avanzar la tortuga y dibujar una línea
   function advance(args) {
-
-
-   console.log("en advance..");
+    console.log("en advance..");
 
     const length = Number(args[0]);
     const angleInRadians = toRadians(turtle.angle);

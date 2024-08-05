@@ -9,3 +9,6 @@
         turn (degrees)
         change color
         save history (for repaiting)
+        recognice lowercase
+        repeat
+        repeat recursive
