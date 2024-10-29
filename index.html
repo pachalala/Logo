@@ -5,31 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comandos y Canvas</title>
     <style>
+        /* Configuración de contenedor principal */
+        #main-container {
+            display: flex;
+            gap: 20px;
+        }
+
         #command-line {
             width: 100%;
             padding: 10px;
             font-size: 16px;
         }
+
         #canvas {
             border: 1px solid black;
             margin-top: 10px;
+        }
+
+        /* Área de texto */
+        #text-region {
+            width: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            height: 400px;
         }
     </style>
 </head>
 <body>
     <input type="text" id="command-line" placeholder="Escribe tu comando aquí...">
-    <canvas id="canvas" width="600" height="400"></canvas>
+
+    <div id="main-container">
+        <!-- Canvas principal -->
+        <canvas id="canvas" width="600" height="400"></canvas>
+
+        <!-- Región de texto -->
+        <div id="text-region">
+       
+            <h2>👨‍💻 Side coding Projects:</h2>
+
+            - <b>Simon Play. An musical educational game (based in Simon Says)</b>
+              - <b>[Simon Play]( https://pachalala.github.io/SimonPlay/) </b> (Sound Fonts, Javascrip Vainilla, Classes, Objects, Canvas)
+       
+            <!-- Aquí puedes agregar contenido en HTML o Markdown -->
+            <h2>Instrucciones</h2>
+            <p>Escribe los comandos para dibujar en el canvas.</p>
+            <ul>
+                <li><strong>drawLine x1 y1 x2 y2</strong>: Dibuja una línea de (x1, y1) a (x2, y2).</li>
+                <li><strong>drawCircle x y r</strong>: Dibuja un círculo en (x, y) con radio r.</li>
+            </ul>
+        </div>
+    </div>
 
     <script src="logo.js"></script>
-
-<script>
-
-executeCommand ("drawLine 50 50 100 100 "); 
-
-executeCommand ("drawLine 50 70 150 150 "); 
-
-
-</script>
-
+    <script>
+        executeCommand("drawLine 50 50 100 100"); 
+        executeCommand("drawLine 50 70 150 150"); 
+    </script>
 </body>
 </html>

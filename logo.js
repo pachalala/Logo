@@ -36,6 +36,38 @@ document.addEventListener("DOMContentLoaded", () => {
     return null;
   }
 
+
+  function splitIgnoringBrackets(input, delimiter) {
+    let result = [];
+    let current = '';
+    let inBrackets = false;
+
+    for (let i = 0; i < input.length; i++) {
+        const char = input[i];
+
+        if (char === '[') {
+            inBrackets = true;
+        } else if (char === ']') {
+            inBrackets = false;
+        }
+
+        if (char === delimiter && !inBrackets) {
+            result.push(current.trim());
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+
+    // Add the last part
+    if (current) {
+        result.push(current.trim());
+    }
+
+    return result;
+}
+
+
   function repeat(args) {
     console.log("in repeat: args:" + args);
 
@@ -45,10 +77,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const match = extractOuterBracketContent(commandStr);
 
     console.log("match" + match);
-
+//repeat 3 [ repeat 6 [ advance 20 ;  turnright 20 ] ; advance 50; turnleft 45 ] 
     if (match) {
       for (let i = 1; i <= numRepetitions; i++) {
-        const commandsList = match.split(";");
+        const commandsList = splitIgnoringBrackets(match,';') ;// match.split(";");
 
         console.log("commandsList:" + commandsList);
 
@@ -62,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
           } else {
             console.log(`Command unknown: ${cmd}`);
           }
+          setTimeout(1000);
         });
       }
     } else {
@@ -237,7 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
-    ctx.strokeStyle = "black";
+    ctx.strokeStyle = color;
 
     ctx.stroke();
   }
