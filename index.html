@@ -9,12 +9,12 @@
         #main-container {
             display: flex;
             gap: 20px;
+            margin-bottom: 20px; /* Para dejar espacio debajo de canvas y text-region */
         }
 
-        #command-line {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
+        #command-line, button {
+            display: block;
+            margin: 10px 0;
         }
 
         #canvas {
@@ -24,7 +24,7 @@
 
         /* Área de texto */
         #text-region {
-            width: 300px;
+            width: 500px;
             padding: 10px;
             border: 1px solid #ccc;
             background-color: #f9f9f9;
@@ -34,7 +34,7 @@
     </style>
 </head>
 <body>
-    <input type="text" id="command-line" placeholder="Escribe tu comando aquí...">
+    <button onclick="toggleLanguage()">Cambiar idioma</button>
 
     <div id="main-container">
         <!-- Canvas principal -->
@@ -43,21 +43,118 @@
         <!-- Región de texto -->
         <div id="text-region">
        
-            <h2>👨‍💻 Side coding Projects:</h2>
+                </div>
 
-            - <b>Simon Play. An musical educational game (based in Simon Says)</b>
-              - <b>[Simon Play]( https://pachalala.github.io/SimonPlay/) </b> (Sound Fonts, Javascrip Vainilla, Classes, Objects, Canvas)
-       
-            <!-- Aquí puedes agregar contenido en HTML o Markdown -->
-            <h2>Instrucciones</h2>
-            <p>Escribe los comandos para dibujar en el canvas.</p>
-            <ul>
-                <li><strong>drawLine x1 y1 x2 y2</strong>: Dibuja una línea de (x1, y1) a (x2, y2).</li>
-                <li><strong>drawCircle x y r</strong>: Dibuja un círculo en (x, y) con radio r.</li>
-            </ul>
-        </div>
-    </div>
+                <input type="text" id="command-line" placeholder="Escribe tu comando aquí...">
+   
+                <script>
 
+                let isEnglish = true;
+
+                function toggleLanguage() {
+                    const textRegion = document.getElementById("text-region");
+                    console.log ("isenglish:" + isEnglish);
+                    if (!isEnglish) {
+                        textRegion.innerHTML = `
+                            <h3>&nbsp;1. <code>advance</code></h3>
+                            <p><strong>Descripción:</strong> Mueve la tortuga hacia adelante una distancia especificada en su dirección actual, dibujando una línea.</p>
+                            <ul>
+                                <li><strong>Uso:</strong> advance [distancia]</li>
+                                <li><strong>Parámetros:</strong>
+                                    <ul>
+                                        <li>distancia: Distancia a moverse hacia adelante en píxeles.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Ejemplo:</strong> <code>avanzar 50</code> - Mueve la tortuga 50 píxeles hacia adelante, dejando una línea detrás.</li>
+                            </ul>
+                            <h3>2. <code>turnleft</code></h3>
+                            <p><strong>Descripción:</strong> Rota la tortuga en sentido antihorario por el ángulo especificado.</p>
+                            <ul>
+                                <li><strong>Uso:</strong> turnleft [ángulo]</li>
+                                <li><strong>Parámetros:</strong>
+                                    <ul>
+                                        <li>ángulo: Ángulo en grados para rotar.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Ejemplo:</strong> <code>turnleft 45</code> - Rota la tortuga 45&deg; hacia la izquierda.</li>
+                            </ul>
+                            <h3>3. <code>turnright</code></h3>
+                            <p><strong>Descripción:</strong> Rota la tortuga en sentido horario por el ángulo especificado.</p>
+                            <ul>
+                                <li><strong>Uso:</strong> <code>turnright [ángulo]</code></li>
+                                <li><strong>Parámetros:</strong>
+                                    <ul>
+                                        <li>ángulo: Ángulo en grados para rotar.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Ejemplo:</strong> <code>girarDerecha 45</code> - Rota la tortuga 45&deg; hacia la derecha.</li>
+                            </ul>`;
+                        }
+                      else
+                      {
+
+                              textRegion.innerHTML =  ` <code><h3>&nbsp;1. <code>advance</code></h3>
+                            <p><strong>Description:</strong> Moves the turtle forward by a specified distance in its current direction, drawing a line.</p>
+                            <ul>
+                            <li><strong>Usage:</strong> <code>advance [distance]</code></li>
+                            <li><strong>Parameters:</strong>
+                            <ul>
+                            <li>distance: Distance to move forward in pixels.</li>
+                            </ul>
+                            </li>
+                            <li><strong>Example: <code>advance 50</code>.</strong></li>
+                            </ul>
+                            <h3>2. <code>turnLeft</code></h3>
+                            <p><strong>Description:</strong> Rotates the turtle counterclockwise by the specified angle.</p>
+                            <ul>
+                            <li><strong>Usage:</strong>turnleft [angle]</li>
+                            <li><strong>Parameters:</strong>
+                            <ul>
+                            <li>angle: Angle in degrees to rotate.</li>
+                            </ul>
+                            </li>
+                            <li><strong>Example: <code>turnleft 45</code>.</strong></li>
+                            </ul>
+                            <h3>3. <code>turnright</code></h3>
+                            <p><strong>Description:</strong> Rotates the turtle clockwise by the specified angle.</p>
+                            <ul>
+                            <li><strong>Usage:</strong> turnright [angle]</li>
+                            <li><strong>Parameters:</strong>
+                            <ul>
+                            <li>angle: Angle in degrees to rotate.</li>
+                            </ul>
+                            </li>
+                            <li><strong>Example: <code>turnright 45</code></strong> </li>
+                            </ul>
+                            <h3>4. <code>repeat</code></h3>
+                            <p><strong>Description:</strong> Repeats a series of commands a specified number of times.</p>
+                            <ul>
+                            <li><strong>Usage:</strong> repeat numRepetitions [ commandSequence]</li>
+                            <li><strong>Parameters:</strong>
+                            <ul>
+                            <li>numRepetitions: Number of times to repeat the command sequence.</li>
+                            <li>commandSequence: Commands to repeat, surrounded by brackets [].</li>
+                            </ul>
+                            </li>
+                            <li><strong>Example: <code>repeat 3 [advance 20 ; turnright 90]</code> </strong>- Repeats the sequence "advance 20; turn right 90&deg;" three times.</li>
+                            </ul>
+                            <h3>5. <code>clear</code></h3>
+                            <p><strong>Description:</strong> Clears the entire canvas, removing all drawings.</p>
+                            <ul>
+                            <li><strong>Usage:</strong> clear</li>
+                            <li><strong>Parameters:</strong> None.</li>
+                            <li><strong>Example: <code>clear</code>.</strong></li>
+                            </ul>
+                            <h3>&nbsp;</h3> </code>
+                    </div>`;
+          
+
+                      }
+                        isEnglish = !isEnglish;
+
+                    }
+                    toggleLanguage() ;
+                  </script>                            
     <script src="logo.js"></script>
     <script>
         executeCommand("drawLine 50 50 100 100"); 
