@@ -34,7 +34,8 @@ drawRect: drawRect,
 
 advance distance
 
-
+Logo instrucciones
+https://medium.com/@isetitra/logo-language-for-windows-mac-and-linux-ab184196bd20
 
 repeat 3 [ repeat 6 [ advance 20 ;  turnright 20 ] ; advance 30 ] 
 repeat 3 [ advance 40 ;  turnright 45 ]

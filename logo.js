@@ -4,8 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const ctx = canvas.getContext("2d");
 
   let turtle = {
-    posX: 100,
-    posY: 100,
+    posX: 200,
+    posY: 600,
     angle: 90,
     color: "blue",
   };
