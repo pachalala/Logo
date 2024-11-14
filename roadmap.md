@@ -38,10 +38,10 @@ Logo instrucciones
 https://medium.com/@isetitra/logo-language-for-windows-mac-and-linux-ab184196bd20
 
 repeat 3 [ repeat 6 [ advance 20 ;  turnright 20 ] ; advance 30 ] 
-repeat 3 [ advance 40 ;  turnright 45 ]
+repeat 3 [ advance 40 ;  turnrigth 45 ]
 
 
-
+repeat 36 [   advance 20 ; turnright 45 ; advance 10 ; turnright 90 ; advance 10 ; turnright 45 ; advance 20 ; turnright 100 ]
 
 
 1. advance
