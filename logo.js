@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const cmdArgs = cmdStr.trim().split(" ");
           const cmd = cmdArgs[0];
           if (commands[cmd]) {
-            console.log(`Executing Command : ${cmd}  ${cmdArgs.slice(1)}`);
+            console.log(`Executing Command (brackets) : ${cmd}  ${cmdArgs.slice(1)}`);
 
             commands[cmd](cmdArgs.slice(1));
           } else {
@@ -110,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
       color: "blue",
     };
 
+    console.log("historial:" + JSON.stringify(history));
     clearCanvas();
     history.forEach((cmd) => {
       console.log("in command:" + JSON.stringify(cmd));
@@ -117,26 +118,123 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     triangulo();
   }
-
+ 
+/*
   // Función para ejecutar comandos
   function executeCommand(command) {
-    const args = command.split(" ");
+    // Función para verificar si un comando está contenido entre corchetes
+    function isInsideBrackets(cmd) {
+      return /\[.*\]/.test(cmd);
+    }
+  
+    // Divide el comando en subcomandos usando ';' como separador
+    let subcommands = splitIgnoringBrackets(command, ';');
+  
+    // Itera sobre cada subcomando
+    subcommands.forEach(subcommand => {
+      if (subcommand) {
+        // Verifica si el subcomando está dentro de corchetes
+        if (isInsideBrackets(subcommand)) {
+          console.log(`Executing command inside brackets: ${subcommand}`);
+          const cmdArgs = subcommand.trim().split(" ");
+          const cmd = cmdArgs[0];
+  
+          if (commands[cmd]) {
+            console.log(`Executing : ${cmd} ${cmdArgs.slice(1).join(" ")}`);
+            history.push({ command: cmd, args: cmdArgs.slice(1) });
+            drawHistory();
+          } else {
+            console.log(`Unknown command: ${cmd}`);
+          }
+        } else {
+          // Procesa subcomandos fuera de los corchetes
+          const cmds = subcommand.split(";");
+          cmds.forEach(cmd => {
+            const args = cmd.trim().split(" ");
+            const commandName = args[0];
+  
+            if (commands[commandName]) {
+              console.log(`Executing : ${commandName} ${args.slice(1).join(" ")}`);
+              history.push({ command: commandName, args: args.slice(1) });
+              drawHistory();
+            } else {
+              console.log(`Unknown command: ${commandName}`);
+            }
+          });
+        }
+      }
+    });
+  }
+ 
+
+
+  function executeCommand(command) {
+    const args = command.trim().split(" ");
     const cmd = args[0];
     if (commands[cmd]) {
-      console.log(`Executing : ${cmd} ${args.slice(1)}  `);
+      console.log(`Executing : ${cmd} ${args.slice(1)} }` );
+      console.log(`Executing JSON: ${cmd} ${ JSON.stringify(   args.slice(1)) } }` );
 
       history.push({ command: cmd, args: args.slice(1) });
 
       drawHistory();
-      /*
-      triangulo(true);
-      commands[cmd](args.slice(1));
-      triangulo();
-      */
     } else {
       console.log(`Command unkown: ${cmd}`);
     }
   }
+
+
+  */ 
+   
+ 
+  function executeCommand(input) {
+    let comandos = [];
+    let currentIndex = 0;
+  
+    while (currentIndex < input.length) {
+      // Si encuentra "repeat" y lo que sigue es un bloque con corchetes
+      if (input.slice(currentIndex).startsWith('repeat')) {
+        let startRepeat = currentIndex;
+        currentIndex += 'repeat'.length; // Mueve el índice después de 'repeat'
+        
+        // Encuentra el primer corchete de apertura '['
+        while (input[currentIndex] !== '[' && currentIndex < input.length) {
+          currentIndex++;
+        }
+  
+        // Maneja la captura de bloques anidados
+        let bracketCount = 1;
+        currentIndex++; // Avanza al primer carácter después de '['
+  
+        while (bracketCount > 0 && currentIndex < input.length) {
+          if (input[currentIndex] === '[') {
+            bracketCount++;
+          } else if (input[currentIndex] === ']') {
+            bracketCount--;
+          }
+          currentIndex++;
+        }
+  
+        // Captura todo el bloque de 'repeat'
+        comandos.push(input.slice(startRepeat, currentIndex).trim());
+      } else {
+        // Encuentra el próximo ';' o el final de la cadena
+        let nextSemicolon = input.indexOf(';', currentIndex);
+        if (nextSemicolon === -1) nextSemicolon = input.length;
+        
+        // Agrega la instrucción si no es una cadena vacía
+        let command = input.slice(currentIndex, nextSemicolon).trim();
+        if (command) comandos.push(command);
+  
+        // Avanza el índice al siguiente carácter después de ';'
+        currentIndex = nextSemicolon + 1;
+      }
+    }
+    console.log(comandos);
+    
+    return comandos;
+  }
+
 
   function changeColor(args) {
     const color = args[0];
