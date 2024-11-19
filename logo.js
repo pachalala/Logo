@@ -186,8 +186,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
   */ 
    
- 
   function executeCommand(input) {
+    let regex = /repeat\s+\d+\s+\[.*?\]|[a-z]+\s+\d+/gi; // Reconoce patrones de 'repeat X [ ... ]' y 'comando número'
+    let matches = [];
+    let match;
+    
+    // Usamos un bucle para buscar todas las coincidencias
+    while ((match = regex.exec(input)) !== null) {
+        matches.push(match[0].trim());
+
+        const args = match[0].trim().split(" ");
+        const cmd = args[0];
+        if (commands[cmd]) {
+          console.log(`Executing : ${cmd} ${args.slice(1)} }` );
+          history.push({ command: cmd, args: args.slice(1) });
+    
+        } 
+        
+
+    }
+    drawHistory();
+    console.log(matches);
+    
+    return matches;
+}
+
+
+  function executeCommand__(input) {
     let comandos = [];
     let currentIndex = 0;
   
@@ -207,6 +232,8 @@ document.addEventListener("DOMContentLoaded", () => {
         currentIndex++; // Avanza al primer carácter después de '['
   
         while (bracketCount > 0 && currentIndex < input.length) {
+
+          console.log ("buscando dentro de []"+input[currentIndex]);
           if (input[currentIndex] === '[') {
             bracketCount++;
           } else if (input[currentIndex] === ']') {
