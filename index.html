@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Comandos y Canvas</title>
+    
+     
+    
     <style>
         /* Configuración de contenedor principal */
         #main-container {
@@ -58,8 +63,8 @@
         </div>
     </div>
 
-        <div id="command-container">
-                    <input type="text" id="command-line" placeholder="Escribe tu comando aquí...">
+                <div id="command-container">
+                    <input type="text" id="command-line" placeholder="Write your code here...">
                     <button onclick="toggleLanguage()">Cambiar idioma</button>
                 </div>
    
@@ -109,7 +114,19 @@
                       else
                       {
 
-                              textRegion.innerHTML =  ` <code><h3>&nbsp;1. <code>advance</code></h3>
+                              textRegion.innerHTML =  `
+                              
+                              <code><h3>A very light weight  LOGO  language interpreter. Using Javascript Vainilla.</code></h3>
+
+                              <code><strong>Instant action!:</strong><br> repeat 36 [   advance 40 ; turnright 45 ; advance 20 ; turnright 90 ; advance 20 ; turnright 45 ; advance 40 ; turnright 100 ]</code>
+                              <img id="copy-button" src="BtnCopy.png" alt="Copy code"
+                              onclick="document.getElementById('command-line').value='repeat 36 [ advance 40 ; turnright 45 ; advance 20 ; turnright 90 ; advance 20 ; turnright 45 ; advance 40 ; turnright 100 ]';"
+                               >
+   
+
+                            <p><code><strong>Command Instructions:</strong></code></p>
+
+                              <code><h3>&nbsp;1. <code>advance</code></h3>
                             <p><strong>Description:</strong> Moves the turtle forward by a specified distance in its current direction, drawing a line.</p>
                             <ul>
                             <li><strong>Usage:</strong> <code>advance [distance]</code></li>
@@ -172,9 +189,6 @@
                     toggleLanguage() ;
                   </script>                            
     <script src="logo.js"></script>
-    <script>
-        executeCommand("drawLine 50 50 100 100"); 
-        executeCommand("drawLine 50 70 150 150"); 
-    </script>
+     
 </body>
 </html>

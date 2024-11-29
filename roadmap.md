@@ -44,6 +44,11 @@ repeat 3 [ advance 40 ;  turnrigth 45 ]
 repeat 36 [   advance 20 ; turnright 45 ; advance 10 ; turnright 90 ; advance 10 ; turnright 45 ; advance 20 ; turnright 100 ]
 
 
+repeat 36 [   advance 40 ; turnright 45 ; advance 20 ; turnright 90 ; advance 20 ; turnright 45 ; advance 40 ; turnright 100 ]
+
+repeat 36 [   advance 50 ; turnright 45 ; advance 20 ; turnright 90 ; advance 20 ; turnright 45 ; advance 50 ; turnright 100 ]
+
+
 1. advance
 Description: Moves the turtle forward by a specified distance in its current direction, drawing a line.
 Usage: advance [distance]
