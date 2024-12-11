@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Diccionario de comandos
   const commands = {
     drawRect: drawRect,
-    clear: clearCanvas,
+    clear: fclear,
     drawtriangle: drawTriangle,
     advance: advance,
     drawline: drawLine,
@@ -128,19 +128,44 @@ document.addEventListener("DOMContentLoaded", () => {
    
   function executeCommand(input) {
 
-    input = input.toLowerCase();
+    input = input.toLowerCase().trim();
 
+    console.log("INPUT:" + input);
+
+
+    if (input == "clear")  
+      {
+         console.log("kleeeeearrr");
+         fclear();
+         return ;
+      }
+
+    
     let regex = /repeat\s+\d+\s+\[.*?\]|[a-z]+\s+\d+/gi; // Reconoce patrones de 'repeat X [ ... ]' y 'comando número'
     let matches = [];
     let match;
     
+
+   // console.log("regex:" +  regex.exec(input) );
+
+
     // Usamos un bucle para buscar todas las coincidencias
     while ((match = regex.exec(input)) !== null) {
         matches.push(match[0].trim());
 
         const args = match[0].trim().split(" ");
         const cmd = args[0];
+        console.log("ene execute comand:" + cmd);
+
         if (commands[cmd]) {
+
+      
+          if (cmd=='lear')
+              {
+                fclear();
+                return;
+
+              }
           console.log(`Executing : ${cmd} ${args.slice(1)} }` );
           history.push({ command: cmd, args: args.slice(1) });
     
@@ -305,10 +330,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // Comando: Limpiar el canvas
   function clearCanvas() {
     console.log("clearCanvas");
-
+   // history = [];
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
+
+  function fclear(algo ) {
+    console.log("en clear()");
+    history = [];
+    console.log("historial de clear:" + JSON.stringify(history));
+   
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    triangulo();
+  }
   // Evento para la línea de comando
   commandLine.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
@@ -318,7 +352,7 @@ document.addEventListener("DOMContentLoaded", () => {
       commandLine.value = "";
     }
   });
-  executeCommand("clear;");
+  //executeCommand("kclear;");
 
 });
 
